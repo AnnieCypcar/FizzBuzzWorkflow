@@ -6,7 +6,7 @@ https://workflowexecutions.googleapis.com/v1/projects/sound-chalice-232414/locat
 
 Remaining to do:
 1. figure out a way to authenticate from a client
-2. find out how to correctly pass input to the workflow entry point (the below curl responds 400)
+2. set up execution from a client or service
 
 ```
 gcloud workflows run fizzbuzz_workflow \
@@ -34,11 +34,47 @@ status:
 workflowRevisionId: 000001-ed4
 ```
 
+REST API
 ```
-curl --request POST "https://workflowexecutions.googleapis.com/v1/projects/sound-chalice-232414/locations/us-central1/workflows/fizzbuzz_workflow/executions" \
---header "Authorization: Bearer "$(gcloud auth application-default print-access-token) \
+curl --request POST --header "Authorization: Bearer "$(gcloud auth application-default print-access-token) \
+--header 'Content-Type: application/json' --data '{"argument":"{\"input\": 15 }"}' \
+"https://workflowexecutions.googleapis.com/v1/projects/sound-chalice-232414/locations/us-central1/workflows/fizzbuzz_workflow/executions"
+```
+Response:
+```
+{
+  "name": "projects/206072839442/locations/us-central1/workflows/fizzbuzz_workflow/executions/a6240682-f8f7-4e3d-9a80-5a62b8f83b01",
+  "startTime": "2023-01-12T13:24:25.798582467Z",
+  "state": "ACTIVE",
+  "argument": "{\"input\":15}",
+  "workflowRevisionId": "000001-ed4",
+  "status": {}
+}
+```
+Retrieve execution results:
+```
+curl --request GET --header "Authorization: Bearer "$(gcloud auth application-default print-access-token) \
 --header 'Content-Type: application/json' \
---data '{
-    "input": 15
-}'
+"https://workflowexecutions.googleapis.com/v1/projects/sound-chalice-232414/locations/us-central1/workflows/fizzbuzz_workflow/executions/a6240682-f8f7-4e3d-9a80-5a62b8f83b01"
+```
+Response:
+```
+{
+  "name": "projects/206072839442/locations/us-central1/workflows/fizzbuzz_workflow/executions/a6240682-f8f7-4e3d-9a80-5a62b8f83b01",
+  "startTime": "2023-01-12T13:24:25.798582467Z",
+  "endTime": "2023-01-12T13:24:31.782815177Z",
+  "state": "SUCCEEDED",
+  "argument": "{\"input\":15}",
+  "result": "{\"body\":{\"answer\":[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\",\"Fizz\",\"7\",\"8\",\"Fizz\",\"Buzz\",\"11\",\"Fizz\",\"13\",\"14\",\"FizzBuzz\"]},\"code\":200,\"headers\":{\"Alt-Svc\":\"h3=\\\":443\\\"; ma=2592000,h3-29=\\\":443\\\"; ma=2592000,h3-Q050=\\\":443\\\"; ma=2592000,h3-Q046=\\\":443\\\"; ma=2592000,h3-Q043=\\\":443\\\"; ma=2592000,quic=\\\":443\\\"; ma=2592000; v=\\\"46,43\\\"\",\"Cache-Control\":\"private\",\"Content-Length\":\"101\",\"Content-Type\":\"application/json\",\"Date\":\"Thu, 12 Jan 2023 13:24:31 GMT\",\"Function-Execution-Id\":\"uchz4pnsod9y\",\"Server\":\"Google Frontend\",\"X-Cloud-Trace-Context\":\"81e7723f4b388bd2b7a34616f0ff1cbe;o=1\"}}",
+  "workflowRevisionId": "000001-ed4",
+  "status": {
+    "currentSteps": [
+      {
+        "routine": "main",
+        "step": "return_result"
+      }
+    ]
+  },
+  "duration": "5.984232710s"
+}
 ```

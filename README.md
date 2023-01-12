@@ -6,7 +6,7 @@ https://workflowexecutions.googleapis.com/v1/projects/sound-chalice-232414/locat
 
 Remaining to do:
 1. figure out a way to authenticate from a client
-~~2. find out how to correctly pass input to the workflow entry point (the below curl responds 400)~~
+2. find out how to correctly pass input to the workflow entry point (the below curl responds 400)
 
 ```
 gcloud workflows run fizzbuzz_workflow \

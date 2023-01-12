@@ -9,4 +9,6 @@ def buzz(request):
     for i in range(len(input)):
         if input[i] % 5 == 0:
             input[i] = 'Buzz'
-    return jsonify(input)
+        else:
+            input[i] = str(input[i])
+    return jsonify({'answer': input})

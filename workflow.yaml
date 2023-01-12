@@ -1,0 +1,25 @@
+main:
+  params: [input]
+  steps:
+    - fizzbuzz_function:
+        call: http.post
+        args:
+            url: https://us-central1-sound-chalice-232414.cloudfunctions.net/fizzbuzz
+            body: ${input}
+        result: fizzbuzz_result
+    - fizz_function:
+        call: http.post
+        args:
+            url: https://us-central1-sound-chalice-232414.cloudfunctions.net/fizz
+            body:
+                input: ${fizzbuzz_result.body}
+        result: fizz_result
+    - buzz_function:
+        call: http.post
+        args:
+            url: https://us-central1-sound-chalice-232414.cloudfunctions.net/buzz
+            body:
+                input: ${fizz_result.body}
+        result: buzz_result
+    - return_result:
+        return: ${buzz_result}

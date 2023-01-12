@@ -1,11 +1,11 @@
 main:
-  params: [input]
+  params: [args]
   steps:
     - fizzbuzz_function:
         call: http.post
         args:
             url: https://us-central1-sound-chalice-232414.cloudfunctions.net/fizzbuzz
-            body: ${input}
+            body: ${args.input}
         result: fizzbuzz_result
     - fizz_function:
         call: http.post

@@ -8,5 +8,5 @@ def buzz(request):
     input = request_json['input']
     for i in range(len(input)):
         if input[i] % 5 == 0:
-            input = 'Buzz'
+            input[i] = 'Buzz'
     return jsonify(input)

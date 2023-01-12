@@ -7,6 +7,7 @@ def fizz(request):
     request_json = request.get_json()
     input = request_json['input']
     for i in range(len(input)):
-        if input[i] % 3 == 0:
-            input[i] = "Fizz"
+        if type(input[i]) == int:
+            if input[i] % 3 == 0:
+                input[i] = "Fizz"
     return jsonify(input)
